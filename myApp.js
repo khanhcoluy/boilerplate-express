@@ -1,7 +1,10 @@
 let express = require('express');
 let app = express();
 
-console.log("Hello World")
+const greetingFunc = (req, res) => {
+  res.send("Hello Express");
+}
+app.get('/', greetingFunc);
 
 
 
@@ -36,4 +39,4 @@ console.log("Hello World")
 
 
 
- module.exports = app;
+module.exports = app;
