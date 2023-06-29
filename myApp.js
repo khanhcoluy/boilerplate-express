@@ -1,20 +1,24 @@
 let express = require('express');
+let bodyParser = require('body-parser');
 let app = express();
 
+// Mount middleware
 const loggerMiddleware = (req, res, next) => {
   console.log(`${req.method} ${req.path} - ${req.ip}`)
   next();
 };
-
 app.use(loggerMiddleware);
-
+app.use(bodyParser.urlencoded({ extended: false }))
 const greetingFunc = (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 }
 app.use('/public', express.static(__dirname + '/public'))
+
+// Methods
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
+
 app.get('/json', (req, res) => {
   const messageStyle = process.env.MESSAGE_STYLE;
   if (messageStyle === 'uppercase') {
@@ -41,8 +45,10 @@ app.get('/name', (req, res) => {
   res.json({ name: `${firstName} ${lastName}` })
 })
 
-
-
+app.post('/name', (req, res) => {
+  const { first: firstName, last: lastName } = req.body;
+  res.json({ name: `${firstName} ${lastName}` });
+})
 
 
 
